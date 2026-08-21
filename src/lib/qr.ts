@@ -13,7 +13,7 @@ export function generatePublicId(): string {
 
 // Generate base64 Data URI for QR code
 export async function generateProductQRCode(publicId: string): Promise<{ url: string, qrDataUri: string }> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.NODE_ENV === 'production' ? 'https://shiv-jewellers20.vercel.app' : 'http://localhost:3000');
   const productUrl = `${baseUrl}/scan/${publicId}`;
   
   try {
