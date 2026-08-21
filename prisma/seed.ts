@@ -10,6 +10,8 @@ async function main() {
     { name: 'Bracelets', slug: 'bracelets' },
     { name: 'Bangles', slug: 'bangles' },
     { name: 'Pendants', slug: 'pendants' },
+    { name: 'Bali', slug: 'bali' },
+    { name: 'Tops', slug: 'tops' },
   ];
 
   for (const cat of categories) {
@@ -20,7 +22,7 @@ async function main() {
     });
   }
 
-  console.log('✅ Seeded 6 jewelry categories');
+  console.log('✅ Seeded 8 jewelry categories');
 }
 
 main()
