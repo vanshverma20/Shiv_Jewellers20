@@ -38,7 +38,7 @@ export function ProductForm({ categories }: { categories: any[] }) {
   const [successData, setSuccessData] = useState<any>(null);
   const [submitError, setSubmitError] = useState('');
 
-  const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<ProductFormValues>({
+  const { register, handleSubmit, formState, watch, setValue } = useForm<any>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       status: 'ACTIVE',
@@ -47,8 +47,10 @@ export function ProductForm({ categories }: { categories: any[] }) {
       stoneCharge: 0,
     }
   });
+  
+  const errors = formState.errors as any;
 
-  const onSubmit = async (data: ProductFormValues) => {
+  const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     setSubmitError('');
     try {
