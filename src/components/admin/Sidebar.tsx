@@ -18,9 +18,10 @@ export function Sidebar() {
   return (
     <div className="w-64 bg-slate-900 border-r border-slate-800 min-h-screen text-slate-100 p-4">
       <div className="mb-8 p-2">
-        <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-          <QrCode className="text-amber-500" /> JWL Admin
+        <h1 className="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+          <QrCode className="text-amber-500" size={20} /> Shiv Jewellers
         </h1>
+        <p className="text-[10px] text-slate-500 tracking-wider uppercase mt-0.5 ml-7">Admin Panel</p>
       </div>
       <nav className="space-y-1">
         {links.map(link => {
