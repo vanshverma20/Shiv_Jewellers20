@@ -124,7 +124,7 @@ export default async function HomePage() {
                 'https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?auto=format&fit=crop&q=80&w=500',
               ];
               return (
-                <div key={c.id} className="group cursor-pointer">
+                <Link key={c.id} href={`/category/${c.slug}`} className="group cursor-pointer block">
                   <div className="aspect-[4/5] rounded-lg overflow-hidden relative shadow-md border border-stone-200">
                     <div
                       className="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out"
@@ -135,7 +135,7 @@ export default async function HomePage() {
                       <h3 className="text-white font-bold text-sm tracking-wider uppercase">{c.name}</h3>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })
           ) : (
