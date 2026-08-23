@@ -20,8 +20,7 @@ export default async function HomePage() {
       <div className="bg-slate-900 text-slate-300 text-xs py-2 px-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1"><Phone size={11} /> +91 98765 43210</span>
-            <span className="hidden sm:flex items-center gap-1"><MapPin size={11} /> Main Market, Your City</span>
+            <span className="flex items-center gap-1"><Phone size={11} /> +91 9310584042</span>
           </div>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1"><Clock size={11} /> 10 AM – 9 PM</span>
@@ -220,8 +219,7 @@ export default async function HomePage() {
           <div>
             <h4 className="text-white font-semibold mb-4 uppercase text-xs tracking-[0.2em]">Visit Us</h4>
             <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2"><MapPin size={14} className="shrink-0 mt-0.5" /> Main Market, Your City, India</li>
-              <li className="flex items-center gap-2"><Phone size={14} /> +91 98765 43210</li>
+              <li className="flex items-center gap-2"><Phone size={14} /> +91 9310584042</li>
               <li className="flex items-center gap-2"><Clock size={14} /> Mon–Sun, 10 AM – 9 PM</li>
             </ul>
           </div>
