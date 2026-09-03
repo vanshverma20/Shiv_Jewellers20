@@ -4,7 +4,7 @@ import { BadgeCheck, Phone, MapPin, Share2 } from "lucide-react";
 
 export default async function ScanPage({ params }: { params: Promise<{ publicId: string }> }) {
   const { publicId } = await params;
-  
+
   const product = await prisma.product.findUnique({
     where: { publicId },
     include: { details: true, pricing: true, images: true, category: true }
@@ -21,7 +21,7 @@ export default async function ScanPage({ params }: { params: Promise<{ publicId:
     <div className="min-h-screen bg-slate-50 font-sans pb-20">
       {/* Verify Banner */}
       <div className="bg-emerald-600 text-white p-3 flex items-center justify-center gap-2 font-medium sticky top-0 z-10 shadow-sm text-sm">
-        <BadgeCheck size={18} fill="currentColor" className="text-emerald-100" /> 
+        <BadgeCheck size={18} fill="currentColor" className="text-emerald-100" />
         Verified Original Product
       </div>
 
@@ -41,22 +41,24 @@ export default async function ScanPage({ params }: { params: Promise<{ publicId:
               <Share2 size={20} />
             </button>
           </div>
-          
-          <p className="text-xs text-slate-500 font-mono mb-6">ID: {product.publicId}</p>
-          
-          <div className="text-3xl font-light text-slate-900 mb-6">
-            ₹{product.pricing?.finalSellingPrice?.toLocaleString() || "Price on Request"}
-            <span className="text-sm text-slate-500 ml-2">incl. taxes</span>
+
+          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-700 mb-3">
+            <BadgeCheck size={14} /> Product Information Verified
           </div>
+
+          <p className="text-xs text-slate-500 font-mono mb-6">ID: {product.publicId}</p>
 
           <div className="space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wide border-b border-slate-200 pb-2 mb-3">Product Specifications</h3>
               <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                <div className="flex flex-col"><dt className="text-slate-500">Product ID</dt><dd className="font-medium text-slate-900">{product.publicId}</dd></div>
+                <div className="flex flex-col"><dt className="text-slate-500">SKU</dt><dd className="font-medium text-slate-900">{product.sku}</dd></div>
+                {product.details?.itemType && <div className="flex flex-col"><dt className="text-slate-500">Item Type</dt><dd className="font-medium text-slate-900">{product.details.itemType}</dd></div>}
                 <div className="flex flex-col"><dt className="text-slate-500">Metal</dt><dd className="font-medium text-slate-900">{product.details?.metalPurity} {product.details?.metalType}</dd></div>
-                <div className="flex flex-col"><dt className="text-slate-500">Gross Weight</dt><dd className="font-medium text-slate-900">{product.details?.grossWeight}g</dd></div>
                 <div className="flex flex-col"><dt className="text-slate-500">Net Weight</dt><dd className="font-medium text-slate-900">{product.details?.netWeight}g</dd></div>
-                {product.details?.stoneType && <div className="flex flex-col"><dt className="text-slate-500">Stone</dt><dd className="font-medium text-slate-900">{product.details?.stoneType} ({product.details?.stoneWeight}g)</dd></div>}
+                {product.details?.color && <div className="flex flex-col"><dt className="text-slate-500">Colour</dt><dd className="font-medium text-slate-900">{product.details.color}</dd></div>}
+                {product.details?.size && <div className="flex flex-col"><dt className="text-slate-500">Size</dt><dd className="font-medium text-slate-900">{product.details.size}</dd></div>}
               </dl>
             </div>
 
@@ -71,10 +73,10 @@ export default async function ScanPage({ params }: { params: Promise<{ publicId:
             )}
 
             <div>
-               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wide border-b border-slate-200 pb-2 mb-3">Description</h3>
-               <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">{product.description || product.shortDescription || "No description provided."}</p>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wide border-b border-slate-200 pb-2 mb-3">Description</h3>
+              <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">{product.description || product.shortDescription || "No description provided."}</p>
             </div>
-            
+
             <div className="pt-6 border-t border-slate-200 flex flex-col gap-3">
               <button className="w-full bg-slate-900 text-white font-medium py-3 rounded-lg shadow flex items-center justify-center gap-2">
                 <Phone size={18} /> Contact Store

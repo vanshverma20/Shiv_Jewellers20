@@ -11,16 +11,17 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email", placeholder: "admin@jewelry.test" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
         const user = await prisma.user.findUnique({
           where: { email: credentials.email }
         });
-        
+
         if (!user) {
-          // If no users exist in the entire db, auto-create a super admin on first login attempt for testing
           const count = await prisma.user.count();
-          if (count === 0) {
+          const initialEmail = process.env.ADMIN_EMAIL;
+          const initialPassword = process.env.ADMIN_PASSWORD;
+          if (count === 0 && initialEmail && initialPassword && credentials.email === initialEmail && credentials.password === initialPassword) {
             const hashedPassword = await bcrypt.hash(credentials.password, 10);
             return await prisma.user.create({
               data: {

@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Smart Jewellery Product & QR Scanner System
 
-## Getting Started
+Shiv Jewellers product management and QR verification platform. It includes a protected admin panel for managing catalogue data and a public, mobile-first product verification experience.
 
-First, run the development server:
+## Features
+
+- Admin login with hashed credentials and protected routes
+- Product creation with automatic unique `JWL-*` Product IDs
+- Automatic QR code and barcode generation for each product
+- Product pricing, stock, hallmark, stone, media, and catalogue metadata
+- Admin product search and status filtering
+- Public product pages showing only the requested product
+- Mobile QR scanner with manual Product ID fallback
+- Prisma ORM with SQLite locally and Vercel Postgres in production
+
+## Local setup
 
 ```bash
+cp .env.example .env
+npm install
+npx prisma generate
+npx prisma db push
+npm run seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`. Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env`; the first login with those exact values creates the initial Super Admin. Existing users must use their stored password.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create a Vercel Postgres database and add `POSTGRES_PRISMA_URL` and `POSTGRES_URL_NON_POOLING` to the Vercel project environment.
+2. Add `NEXTAUTH_URL`, a long random `NEXTAUTH_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`.
+3. Set `NEXT_PUBLIC_APP_URL` to the deployed site URL so generated QR codes point to production.
+4. Deploy with `npm run build`. The Vercel build script switches Prisma to PostgreSQL, pushes the schema, seeds categories, and builds Next.js.
 
-## Learn More
+Never commit `.env` or production database credentials.
 
-To learn more about Next.js, take a look at the following resources:
+## Routes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/` public catalogue
+- `/scanner` camera scanner
+- `/scan/[publicId]` public product verification
+- `/admin-login` admin login
+- `/admin/products` protected catalogue management
+- `/admin/products/new` protected product creation

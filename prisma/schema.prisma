@@ -65,6 +65,8 @@ model Product {
   slug             String        @unique
   description      String?
   shortDescription String?
+  itemType         String?
+  videoUrl         String?
   status           ProductStatus @default(DRAFT)
   isFeatured       Boolean       @default(false)
 
@@ -99,12 +101,15 @@ model JewelryDetails {
 
   metalType   String // Gold, Silver, Platinum
   metalPurity String // 18K, 22K, 24K, 925
+  itemType    String?
   grossWeight Float
   netWeight   Float
   stoneWeight Float?
   stoneType   String?
   stoneCount  Int     @default(0)
   stoneColor  String?
+  color       String?
+  size        String?
   diamondInfo String?
 
   hallmarkInfo String?
@@ -159,9 +164,9 @@ model ProductImage {
 }
 
 model QRCode {
-  id        String   @id @default(cuid())
-  productId String   @unique
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id          String   @id @default(cuid())
+  productId   String   @unique
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   url         String
   qrData      String
   barcodeData String?

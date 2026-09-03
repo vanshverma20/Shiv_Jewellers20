@@ -15,7 +15,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
   }
 
   const products = await prisma.product.findMany({
-    where: { 
+    where: {
       status: 'ACTIVE',
       categoryId: category.id,
     },
@@ -61,7 +61,6 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                 <div className="mt-3 px-1">
                   <h3 className="font-semibold text-slate-800 text-sm group-hover:text-amber-700 transition-colors truncate">{p.name}</h3>
                   <p className="text-slate-400 text-xs mt-0.5">{p.category.name} · {p.details?.metalPurity}</p>
-                  <p className="text-amber-600 text-xs font-bold mt-1">₹{p.pricing?.finalSellingPrice?.toLocaleString() || 'N/A'}</p>
                 </div>
               </Link>
             ))}

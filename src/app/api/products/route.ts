@@ -37,6 +37,8 @@ export async function POST(req: Request) {
         name: data.name,
         slug,
         description: data.description,
+        itemType: data.itemType || null,
+        videoUrl: data.videoUrl || null,
         status: data.status || 'ACTIVE',
         categoryId: data.categoryId,
 
@@ -45,22 +47,28 @@ export async function POST(req: Request) {
           create: {
             metalType: data.metalType,
             metalPurity: data.metalPurity,
-            grossWeight: 0,       // optional — set 0 as default
+            itemType: data.itemType || null,
+            grossWeight: data.grossWeight ? Number(data.grossWeight) : 0,
             netWeight: 0,         // optional — set 0 as default
             stoneType: data.stoneType || null,
-            stoneCount: 0,
+            stoneWeight: data.stoneWeight ? Number(data.stoneWeight) : null,
+            stoneCount: data.stoneCount ? parseInt(data.stoneCount) : 0,
+            color: data.color || null,
+            size: data.size || null,
+            hallmarkInfo: data.hallmarkInfo || null,
+            huid: data.huid || null,
           }
         },
 
         // Pricing defaults (no UI for it, zeroed out)
         pricing: {
           create: {
-            basePrice: 0,
-            makingCharge: 0,
-            stoneCharge: 0,
-            discount: 0,
-            gstPercentage: 3,
-            finalSellingPrice: 0,
+            basePrice: Number(data.basePrice || 0),
+            makingCharge: Number(data.makingCharge || 0),
+            stoneCharge: Number(data.stoneCharge || 0),
+            discount: Number(data.discount || 0),
+            gstPercentage: Number(data.gstPercentage ?? 3),
+            finalSellingPrice: Math.max(0, (Number(data.basePrice || 0) + Number(data.makingCharge || 0) + Number(data.stoneCharge || 0)) * (1 + Number(data.gstPercentage ?? 3) / 100) - Number(data.discount || 0)),
           }
         },
 
@@ -69,6 +77,7 @@ export async function POST(req: Request) {
           create: {
             stockQuantity: data.stockQuantity ? parseInt(data.stockQuantity) : 0,
             availableQuantity: data.stockQuantity ? parseInt(data.stockQuantity) : 0,
+            warehouseLoc: data.warehouseLoc || null,
           }
         },
 

@@ -11,11 +11,26 @@ const productSchema = z.object({
   sku: z.string().min(2, 'SKU is required'),
   categoryId: z.string().min(1, 'Category is required'),
   description: z.string().optional(),
+  videoUrl: z.string().url('Enter a valid video URL').optional().or(z.literal('')),
   status: z.enum(['DRAFT', 'ACTIVE', 'ARCHIVED']).default('ACTIVE'),
+  itemType: z.string().min(1, 'Item type is required'),
   metalType: z.string().min(1, 'Metal type is required'),
   metalPurity: z.string().min(1, 'Purity is required'),
+  grossWeight: z.coerce.number().min(0).default(0),
+  stoneWeight: z.coerce.number().min(0).optional(),
   stoneType: z.string().optional(),
+  stoneCount: z.coerce.number().int().min(0).default(0),
+  color: z.string().optional(),
+  size: z.string().optional(),
+  hallmarkInfo: z.string().optional(),
+  huid: z.string().optional(),
+  basePrice: z.coerce.number().min(0).default(0),
+  makingCharge: z.coerce.number().min(0).default(0),
+  stoneCharge: z.coerce.number().min(0).default(0),
+  discount: z.coerce.number().min(0).default(0),
+  gstPercentage: z.coerce.number().min(0).max(100).default(3),
   stockQuantity: z.coerce.number().min(0).default(0),
+  warehouseLoc: z.string().optional(),
 });
 
 export function ProductForm({ categories }: { categories: any[] }) {
@@ -96,7 +111,7 @@ export function ProductForm({ categories }: { categories: any[] }) {
             </h3>
             <img src={successData.qrCode.qrData} alt="Product QR Code" className="w-40 h-40 bg-white p-2 rounded shadow-sm border border-slate-200" />
             <a href={successData.qrCode.qrData} download={`QR-${successData.publicId}.png`}
-               className="mt-4 text-amber-600 hover:text-amber-700 font-medium text-sm transition-colors cursor-pointer">
+              className="mt-4 text-amber-600 hover:text-amber-700 font-medium text-sm transition-colors cursor-pointer">
               Download QR
             </a>
           </div>
@@ -112,7 +127,7 @@ export function ProductForm({ categories }: { categories: any[] }) {
               </h3>
               <img src={successData.qrCode.barcodeData} alt="Product Barcode" className="w-48 h-20 bg-white p-2 border border-slate-200 rounded object-contain" />
               <a href={successData.qrCode.barcodeData} download={`BARCODE-${successData.publicId}.png`}
-                 className="mt-4 text-amber-600 hover:text-amber-700 font-medium text-sm transition-colors cursor-pointer">
+                className="mt-4 text-amber-600 hover:text-amber-700 font-medium text-sm transition-colors cursor-pointer">
                 Download Barcode
               </a>
             </div>
@@ -181,6 +196,11 @@ export function ProductForm({ categories }: { categories: any[] }) {
         <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-5">Jewelry Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Item Type</label>
+            <input type="text" {...register('itemType')} placeholder="e.g. Ring, Bracelet" className="w-full rounded-md border border-slate-300 p-2.5 focus:border-amber-500 focus:outline-none" />
+            {errors.itemType && <p className="text-red-500 text-xs mt-1">{errors.itemType.message}</p>}
+          </div>
+          <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Metal Type</label>
             <select {...register('metalType')} className="w-full rounded-md border border-slate-300 p-2.5 focus:border-amber-500 focus:outline-none">
               <option value="">Select...</option>
@@ -200,6 +220,13 @@ export function ProductForm({ categories }: { categories: any[] }) {
             <label className="block text-sm font-medium text-slate-700 mb-1">Stone Type (Optional)</label>
             <input type="text" {...register('stoneType')} placeholder="e.g. Diamond, Ruby" className="w-full rounded-md border border-slate-300 p-2.5 focus:border-amber-500 focus:outline-none" />
           </div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Gross Weight (g)</label><input type="number" step="0.01" {...register('grossWeight')} className="w-full rounded-md border border-slate-300 p-2.5" /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Stone Weight (g)</label><input type="number" step="0.01" {...register('stoneWeight')} className="w-full rounded-md border border-slate-300 p-2.5" /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Stone Count</label><input type="number" {...register('stoneCount')} className="w-full rounded-md border border-slate-300 p-2.5" /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Colour</label><input type="text" {...register('color')} placeholder="e.g. Yellow Gold" className="w-full rounded-md border border-slate-300 p-2.5" /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Size</label><input type="text" {...register('size')} placeholder="e.g. 18, Adjustable" className="w-full rounded-md border border-slate-300 p-2.5" /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">HUID</label><input type="text" {...register('huid')} className="w-full rounded-md border border-slate-300 p-2.5" /></div>
+          <div className="md:col-span-2"><label className="block text-sm font-medium text-slate-700 mb-1">Certification / Hallmark</label><input type="text" {...register('hallmarkInfo')} placeholder="e.g. BIS Hallmarked" className="w-full rounded-md border border-slate-300 p-2.5" /></div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Stock Quantity</label>
             <input type="number" {...register('stockQuantity')} className="w-full rounded-md border border-slate-300 p-2.5 focus:border-amber-500 focus:outline-none" />
@@ -207,10 +234,21 @@ export function ProductForm({ categories }: { categories: any[] }) {
         </div>
       </div>
 
+      {/* Pricing */}
+      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+        <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-5">Pricing & Inventory</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            ['basePrice', 'Product Price'], ['makingCharge', 'Making Charges'], ['stoneCharge', 'Stone Charges'], ['discount', 'Discount'], ['gstPercentage', 'GST %'], ['stockQuantity', 'Stock Quantity']
+          ].map(([field, label]) => <div key={field}><label className="block text-sm font-medium text-slate-700 mb-1">{label}</label><input type="number" step="0.01" {...register(field)} className="w-full rounded-md border border-slate-300 p-2.5" /></div>)}
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Location</label><input type="text" {...register('warehouseLoc')} placeholder="e.g. Showroom A" className="w-full rounded-md border border-slate-300 p-2.5" /></div>
+        </div>
+      </div>
+
       {/* Image Upload */}
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
         <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-5">Product Photos</h3>
-        <div 
+        <div
           className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-amber-400 hover:bg-amber-50/30 transition-colors"
           onClick={() => fileRef.current?.click()}
         >
@@ -246,6 +284,7 @@ export function ProductForm({ categories }: { categories: any[] }) {
             ))}
           </div>
         )}
+        <div className="mt-5"><label className="block text-sm font-medium text-slate-700 mb-1">Product Video URL (Optional)</label><input type="url" {...register('videoUrl')} placeholder="https://..." className="w-full rounded-md border border-slate-300 p-2.5" /></div>
       </div>
 
       <div className="flex justify-end pt-6 border-t border-slate-200 pb-20">
