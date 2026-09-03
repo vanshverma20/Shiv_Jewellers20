@@ -13,9 +13,13 @@ export function generatePublicId(): string {
 
 // Generate base64 Data URI for QR code
 export async function generateProductQRCode(publicId: string): Promise<{ url: string, qrDataUri: string }> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.NODE_ENV === 'production' ? 'https://shiv-jewellers20.vercel.app' : 'http://localhost:3000');
+  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '');
+  const productionUrl = 'https://shiv-jewellers20.vercel.app';
+  const baseUrl = process.env.NODE_ENV === 'production'
+    ? (configuredUrl && !configuredUrl.includes('localhost') ? configuredUrl : productionUrl)
+    : (configuredUrl || 'http://localhost:3000');
   const productUrl = `${baseUrl}/scan/${publicId}`;
-  
+
   try {
     const qrDataUri = await QRCode.toDataURL(productUrl, {
       width: 400,
