@@ -49,7 +49,7 @@ export async function POST(req: Request) {
             metalPurity: data.metalPurity,
             itemType: data.itemType || null,
             grossWeight: data.grossWeight ? Number(data.grossWeight) : 0,
-            netWeight: 0,         // optional — set 0 as default
+            netWeight: data.netWeight ? Number(data.netWeight) : 0,
             stoneType: data.stoneType || null,
             stoneWeight: data.stoneWeight ? Number(data.stoneWeight) : null,
             stoneCount: data.stoneCount ? parseInt(data.stoneCount) : 0,

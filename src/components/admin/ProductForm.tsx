@@ -17,6 +17,7 @@ const productSchema = z.object({
   metalType: z.string().min(1, 'Metal type is required'),
   metalPurity: z.string().min(1, 'Purity is required'),
   grossWeight: z.coerce.number().min(0).default(0),
+  netWeight: z.coerce.number().min(0).default(0),
   stoneWeight: z.coerce.number().min(0).optional(),
   stoneType: z.string().optional(),
   stoneCount: z.coerce.number().int().min(0).default(0),
@@ -221,6 +222,7 @@ export function ProductForm({ categories }: { categories: any[] }) {
             <input type="text" {...register('stoneType')} placeholder="e.g. Diamond, Ruby" className="w-full rounded-md border border-slate-300 p-2.5 focus:border-amber-500 focus:outline-none" />
           </div>
           <div><label className="block text-sm font-medium text-slate-700 mb-1">Gross Weight (g)</label><input type="number" step="0.01" {...register('grossWeight')} className="w-full rounded-md border border-slate-300 p-2.5" /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Net Weight (g)</label><input type="number" step="0.01" {...register('netWeight')} className="w-full rounded-md border border-slate-300 p-2.5" /></div>
           <div><label className="block text-sm font-medium text-slate-700 mb-1">Stone Weight (g)</label><input type="number" step="0.01" {...register('stoneWeight')} className="w-full rounded-md border border-slate-300 p-2.5" /></div>
           <div><label className="block text-sm font-medium text-slate-700 mb-1">Stone Count</label><input type="number" {...register('stoneCount')} className="w-full rounded-md border border-slate-300 p-2.5" /></div>
           <div><label className="block text-sm font-medium text-slate-700 mb-1">Colour</label><input type="text" {...register('color')} placeholder="e.g. Yellow Gold" className="w-full rounded-md border border-slate-300 p-2.5" /></div>
